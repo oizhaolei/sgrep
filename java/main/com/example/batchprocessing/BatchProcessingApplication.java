@@ -13,8 +13,7 @@ public class BatchProcessingApplication {
 
 // create the Options
         Options options = new Options();
-        options.addOption("d", "data", true, "palo alto config xml file");
-        options.addOption("m", "match", true, "file with multi line ");
+        options.addOption("d", "data", true, "palo alto config xml file or any data file");
         options.addOption("h", "help", false, "print help info");
 
         try {
@@ -23,7 +22,7 @@ public class BatchProcessingApplication {
             List<String> argList = line.getArgList();
 
             // validate that block-size has been set
-            if (line.hasOption("help") || !line.hasOption("data") || (argList.size() == 0 && !line.hasOption("match"))) {
+            if (line.hasOption("help") || !line.hasOption("data") || argList.size() == 0) {
                 // automatically generate the help statement
                 HelpFormatter formatter = new HelpFormatter();
                 formatter.printHelp("sgrep", options);
@@ -32,15 +31,15 @@ public class BatchProcessingApplication {
             }
 
             String data = line.getOptionValue("data");
-            String match = line.getOptionValue("match");
-
             File xmlFile = new File(data);
 
             if (argList.size() > 0) {
-                SuperGrep.grep(xmlFile, argList);
-            } else {
-                File matchFile = new File(match);
-                SuperGrep.grep(xmlFile, matchFile);
+            	File matchFile = new File(argList.get(0));
+            	if (matchFile.exists()) {
+                    SuperGrep.grep(xmlFile, matchFile);
+            	} else {
+                    SuperGrep.grep(xmlFile, argList);
+            	}
             }
 
         } catch (ParseException exp) {
