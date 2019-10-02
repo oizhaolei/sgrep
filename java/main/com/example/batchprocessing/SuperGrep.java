@@ -11,9 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SuperGrep {
-    public static SuperGrep grep(File dataFile, File matchFile) throws Exception {
+    public static SuperGrep grep(File dataFile, File matchFile, boolean fullGrep) throws Exception {
         List<String> matchLines = readLines(matchFile);
-        return SuperGrep.grep(dataFile, matchLines);
+        return SuperGrep.grep(dataFile, matchLines, fullGrep);
     }
 
     private static List<String> readLines(File file) throws Exception {
@@ -30,10 +30,11 @@ public class SuperGrep {
         return lines;
     }
     
-    public static SuperGrep grep(File dataFile, List<String> lines) throws Exception {
+    public static SuperGrep grep(File dataFile, List<String> lines, boolean fullGrep) throws Exception {
         for (String line : lines) {
+            System.out.println(line);
+
             int lineNo = 0;
-            String currDataLine = "";
             boolean match = false;
 
             BufferedReader reader = new BufferedReader(new FileReader(dataFile));
@@ -45,18 +46,15 @@ public class SuperGrep {
                     //System.out.println(String.format("doMatchLine %s, %s, %s", d, line, match));
 
                     if (match) {
-                        currDataLine = d;
-                        break;
+                        System.out.println("   - # " + lineNo + ':' + d);
+
+                        if (!fullGrep) {                        	
+                        	break;
+                        }
                     }
                 }
             } catch (Exception e) {
                 reader.close();
-            }
-
-            if (match) {
-                System.out.println(line + " - # " + lineNo + ':' + currDataLine);
-            } else {
-                System.out.println(line);
             }
         }
 

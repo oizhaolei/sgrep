@@ -14,6 +14,7 @@ public class BatchProcessingApplication {
 // create the Options
         Options options = new Options();
         options.addOption("d", "data", true, "palo alto config xml file or any data file");
+        options.addOption("f", "full", false, "full grep");
         options.addOption("h", "help", false, "print help info");
 
         try {
@@ -36,9 +37,9 @@ public class BatchProcessingApplication {
             if (argList.size() > 0) {
             	File matchFile = new File(argList.get(0));
             	if (matchFile.exists()) {
-                    SuperGrep.grep(xmlFile, matchFile);
+                    SuperGrep.grep(xmlFile, matchFile, line.hasOption("full"));
             	} else {
-                    SuperGrep.grep(xmlFile, argList);
+                    SuperGrep.grep(xmlFile, argList, line.hasOption("full"));
             	}
             }
 
