@@ -46,7 +46,7 @@ public class SuperGrep {
                     //System.out.println(String.format("doMatchLine %s, %s, %s", d, line, match));
 
                     if (match) {
-                        System.out.println("   - # " + lineNo + ':' + d);
+                        System.out.println("   - #" + lineNo + ':' + d);
 
                         if (!fullGrep) {                        	
                         	break;
@@ -139,6 +139,9 @@ public class SuperGrep {
 
     static IPRange getIPRange(String target) {
         try {
+            if (target.endsWith("/32")) {
+                return new IPRange(target.substring(0, target.length() - 3));
+            }
             if (isIP(target)) {
                 return new IPRange(target);
             }
